@@ -3,7 +3,10 @@ source("./UsefulFunctions.R")
 library(data.table)
 library(readxl)
 library(dplyr)
-
+library(tidyverse)
+library(gridExtra)
+library(leaflet)
+library(maps)
 # The data is available at:
 # 
 #         https://ed-public-download.app.cloud.gov/downloads/Most-Recent-Cohorts-All-Data-Elements.csv.
@@ -73,40 +76,5 @@ library(dplyr)
         g <- ggplot(data=fifteen,aes(x=SATWRMID)) + geom_histogram()
         ggplot(data=fifteen,aes(x=SAT_AVG,y=MN_EARN_WNE_P6)) + geom_point()
 
-#Looks like there are no data points for this year. Maybe try an earlier year
-        ten <- fread("./CollegeScorecard_Raw_Data/MERGED2009_10_PP.csv",na.strings = c("NA","NULL"))
-        h <- ggplot(data=ten,aes(x=SAT_AVG,y=MN_EARN_WNE_P8)) + 
-                geom_point()
-                h + scale_y_discrete(breaks = seq(0,100000,10000))
-#from this we see an overall increasing trend with average SAT score of an institution
-# correlated with earning after 6 years.
-#There are, however, a fair number of missing values (about a third)
-#Before going on, we should probably break the data into training and testing sets
-        in.train <- as.logical(rbinom(ten[,.N],1,.9))
-        training <- ten[in.train]
-        testing <- ten[!in.train]
-        
-#To tidy data, the minority servingness should be put into a single variable if possible
-        lapply(training[,HBCU:NANTI],function(x)all(is.na(x)))
-#All of the values, however are NA, so no use in that.
-        
-#Looking at missingness, we need to find if there are certain factors that predict missingness
-#I have to do some review..
-        
-#looking at the summaries of the variables
-        summaries <- summary(fifteen)
-#it's been a while, so going to look at what this "summaries" object is really like
-        class(summaries)
-        attributes(summaries)
-        numericFeatures <- sapply(fifteen,is.numeric) %>% which()
-        #use showSummaries() function defined in UefulFunctions.R
-        showSummaries(summaries[,numericFeatures])
-        
-        #boxplot(summaries[,numericFeatures[1:4]])#this doesn't work.. You can't make boxplots
-        #from summaries.
-        dic[grep("^COST",AllVarNames,value=TRUE)]
-        boxplot(fifteen[,grep("^COST",names(fifteen),value=TRUE),with=FALSE])
-        
-        
-        
-        
+#Looks like there are no data points for this year. Maybe try an earlier year Exploring2010.R
+       
